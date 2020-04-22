@@ -188,8 +188,13 @@ sudo mount -v 10.11.12.101:/another /mnt/two
 You might want to make the root share read only, or even make it inaccessible, to encourage users to only mount the correct, more specific shares directly. To do so you'll need to modify the exports file so the root share doesn't get configured based on the values assigned to the PERMITTED or SYNC environment variables.
 
 ### Dynamic multiple shared directories
+Running nfs server
 ```
-docker run --rm -d --name nfs --privileged -v /home/share:/data -v /home/share1:/data1 -v /home/share2:/data2 -v /home/share3:/data3 -e SHARED_DIRECTORY=/data -e SHARED_DIRECTORY_1=/data1 -e SHARED_DIRECTORY_2=/data2 -e SHARED_DIRECTORY_3=/data3 isobar/nfs:1.0.0
+docker run --rm -d --name nfs --privileged -p 2049:2049 -v /home/share:/data -v /home/share1:/data1 -v /home/share2:/data2 -v /home/share3:/data3 -e SHARED_DIRECTORY=/data -e SHARED_DIRECTORY_1=/data1 -e SHARED_DIRECTORY_2=/data2 -e SHARED_DIRECTORY_3=/data3 isobar/nfs:1.0.0
+```
+Running nfs client
+```
+sudo mount -v -t nfs -o vers=4,port=2049 127.0.0.1:/ /mnt/upload
 ```
 
 ### What Good Looks Like
